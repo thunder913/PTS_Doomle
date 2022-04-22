@@ -160,7 +160,24 @@ namespace PTS_Doomle.Data
 
                 return results.Cast<T>().ToList();
             }
-            //Correlation coef is 0.84, if needed
+            else if (typeof(T) == typeof(Models.Results))
+            {
+                var values = this.GetValueFromCache<Models.Results>();
+                if (!values.Any())
+                {
+                    values = this.dataManager.ReadResultsFromFile(new List<string>() { GradeFileName1, GradeFileName2 });
+                }                
+                return values.Cast<T>().ToList();
+            }
+            else if (typeof(T) == typeof(StudentsActivities))
+            {
+                var values = this.GetValueFromCache<StudentsActivities>();
+                if (!values.Any())
+                {
+                    values = this.dataManager.ReadActivitiesFromFile(LogsFileName);
+                }
+                return values.Cast<T>().ToList();
+            }
             return new List<T>();
         }
 

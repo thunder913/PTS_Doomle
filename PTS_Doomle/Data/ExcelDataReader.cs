@@ -22,7 +22,16 @@ namespace PTS_Doomle.Data
                         for (int i = 1; i < table.Rows.Count; i++)
                         {
                             var row = table.Rows[i];
-
+                            DateTime date;
+                            var sucess = DateTime.TryParseExact(row?.ItemArray[0]?.ToString(), "dd/MM/yy, HH:mm", null, System.Globalization.DateTimeStyles.None, out date);
+                            if (!sucess)
+                            {
+                                sucess = DateTime.TryParseExact(row?.ItemArray[0]?.ToString(), "d/MM/yy, HH:mm", null, System.Globalization.DateTimeStyles.None, out date);
+                                if (!sucess)
+                                {
+                                    continue;
+                                }
+                            }
                             var context = row?.ItemArray[1]?.ToString();
                             var component = row?.ItemArray[2]?.ToString();
                             var name = row?.ItemArray[3]?.ToString();
@@ -30,6 +39,7 @@ namespace PTS_Doomle.Data
 
                             toReturn.Add(new StudentsActivities()
                             {
+                                Time = date,
                                 Component = component,
                                 Context = context,
                                 Description = description,
